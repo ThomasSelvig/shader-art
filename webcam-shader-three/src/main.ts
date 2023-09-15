@@ -1,42 +1,30 @@
-import './style.css'
 import * as THREE from "three"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+import './style.css'
+import vertex from "./shaders/vertex.glsl"
+import fragment from "./shaders/fragment.glsl"
 
 
 const camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 100 );
+// allow orbit controls to move the camera
 camera.position.z = 0.01;
 
 const scene = new THREE.Scene();
 
 const video = document.getElementById( 'video' ) as HTMLVideoElement ;
 
-const texture = new THREE.VideoTexture( video );
-texture.colorSpace = THREE.SRGBColorSpace;
+const videoTexture = new THREE.VideoTexture( video );
+videoTexture.colorSpace = THREE.SRGBColorSpace;
 
 const geometry = new THREE.PlaneGeometry( 16, 9 );
 geometry.scale( 0.5, 0.5, 0.5 );
 
-const vertexShader = `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-const fragmentShader = `
-  uniform sampler2D textureUniform;
-  varying vec2 vUv;
-
-  void main() {
-    gl_FragColor = texture2D(textureUniform, vUv);
-  }
-`;
 const videoShaderMaterial = new THREE.ShaderMaterial({
-  vertexShader: vertexShader,
-  fragmentShader: fragmentShader,
+  vertexShader: vertex,
+  fragmentShader: fragment,
   uniforms: {
-    textureUniform: { value: texture }  // Set your texture here
+    textureUniform: { value: videoTexture }
   }
 });
 
@@ -81,7 +69,7 @@ function animate() {
 
   // update video texture
   if (video.readyState === video.HAVE_ENOUGH_DATA) {
-    texture.needsUpdate = true;
+    videoTexture.needsUpdate = true;
   }
   // update controls
   controls.update()
