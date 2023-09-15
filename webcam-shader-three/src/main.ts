@@ -40,9 +40,8 @@ const videoShaderMaterial = new THREE.ShaderMaterial({
   }
 });
 
-// const material = new THREE.MeshBasicMaterial( { map: texture } );
-// const mesh = new THREE.Mesh( geometry, material );
 const mesh = new THREE.Mesh( geometry, videoShaderMaterial );
+mesh.scale.multiply(new THREE.Vector3(-1, 1, 1))  // flip the mesh 180deg
 mesh.position.set(0, 0, -5)
 mesh.lookAt(camera.position)
 scene.add(mesh)
