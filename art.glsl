@@ -26,11 +26,19 @@ void main() {
     uv.x *= iResolution.x / iResolution.y;
 
     vec3 col = vec3(1., 0., 0.);
+    float finalTransform = 0.;
 
+
+    // add repeating circle
     float repeatingCircleDist = sin(sdCircle(uv, 0.) * 10. + iTime) / 10.;
     // inverse circle distance => glow effect
     repeatingCircleDist = .01 / abs(repeatingCircleDist);
-    float circleTransform = repeatingCircleDist;
+    // add to final transform (condition to be displayed)
+    finalTransform += repeatingCircleDist;
 
-    gl_FragColor = vec4(col * circleTransform, 1);
+    // add hexagon
+    float hexDist = sdHexagon(uv, .5);
+    finalTransform += .01/abs(hexDist);
+
+    gl_FragColor = vec4(col * finalTransform, 1);
 }
