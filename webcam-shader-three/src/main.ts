@@ -2,6 +2,7 @@ import * as THREE from "three"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import './style.css'
+// vite-plugin-glsl allows for importing glsl files
 import vertex from "./shaders/vertex.glsl"
 import fragment from "./shaders/fragment.glsl"
 
@@ -39,7 +40,7 @@ scene.add(mesh)
 const renderer = new THREE.WebGLRenderer( { antialias: true } );
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+document.querySelector("#app")!.appendChild(renderer.domElement)
 
 // setup controls
 const controls = new OrbitControls( camera, renderer.domElement );
